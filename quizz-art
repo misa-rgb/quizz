@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Interactif</title>
+    <style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            text-align: center;
+            background-color: #FFB6C1;
+            padding: 20px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz : Connais-tu vraiment le monde de l'Art ?</h1>
+
+        <div id="quiz">
+            <p class="question" id="question">Loading...</p>
+            <div id="options"></div>
+            <button onclick="submitAnswer()">Valider</button>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Quel mouvement artistique est associé à Salvador Dalí ?",
+                options: ["Impressionnisme", "Cubisme", "Renaissance", "Surréalisme"],
+                answer: "Surréalisme"
+            },
+            {
+                question: "Quel artiste est associé aux Nymphéas ?",
+                options: ["Claude Monet", "Paul Gauguin", "Pierre-Auguste Renoir", "Édouard Manet"],
+                answer: "Claude Monet"
+            },
+            {
+                question: "Quel peintre est célèbre pour ses tournesols ?",
+                options: ["Vincent Van Gogh", "Pablo Picasso", "Léonard de Vinci", "Michel-Ange"],
+                answer: "Vincent Van Gogh"
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        function loadQuestion() {
+            const questionData = quizData[currentQuestion];
+            document.getElementById("question").textContent = questionData.question;
+
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+
+            questionData.options.forEach(option => {
+                const button = document.createElement("button");
+                button.className = "option";
+                button.textContent = option;
+                button.onclick = () => selectOption(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        let selectedOption = "";
+
+        function selectOption(option) {
+            selectedOption = option;
+        }
+
+        function submitAnswer() {
+            if (!selectedOption) {
+                alert("Choisis une réponse !");
+                return;
+            }
+
+            const correctAnswer = quizData[currentQuestion].answer;
+            const result = document.getElementById("result");
+
+            if (selectedOption === correctAnswer) {
+                result.textContent = "Wow, bien joué !";
+            } else {
+                result.textContent = `Tu fera mieux la prochaine fois. La bonne réponse était : ${correctAnswer}`;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < quizData.length) {
+                setTimeout(() => {
+                    result.textContent = "";
+                    loadQuestion();
+                }, 1500);
+            } else {
+                setTimeout(() => {
+                    result.textContent = "🎉 Quiz terminé, bravo !";
+                }, 1500);
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
